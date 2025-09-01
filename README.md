@@ -2,9 +2,9 @@
 ## Todd Dickinson
 ### GEOG-776 Repo
 
-| Lab  | Project |
-|------|---------|
-| lab1 | [Lab 1](Lab1/)|
+| Lab  | Project Work |
+|------|--------------|
+| lab1 | [Open](Lab1/)|
 | lab2 | [Open](Lab2/)|
 | lab3 | [Open](Lab3/)|
 | lab4 | [Open](Lab4/)|
