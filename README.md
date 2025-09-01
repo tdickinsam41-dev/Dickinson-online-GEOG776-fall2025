@@ -4,10 +4,10 @@
 
 | Lab  | Project |
 |------|---------|
-| lab1 | [Open](Lab1/)|
-| lab2 | [Open](Lab1/)|
-| lab3 | [Open](Lab1/)|
-| lab4 | [Open](Lab1/)|
-| lab5 | [Open](Lab1/)|
-| lab6 | [Open](Lab1/)|
-| lab7 | [Open](Lab1/)|
+| lab1 | [Lab 1](Lab1/)|
+| lab2 | [Open](Lab2/)|
+| lab3 | [Open](Lab3/)|
+| lab4 | [Open](Lab4/)|
+| lab5 | [Open](Lab5/)|
+| lab6 | [Open](Lab6/)|
+| lab7 | [Open](Lab7/)|
