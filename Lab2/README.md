@@ -24,6 +24,7 @@ for i in part2:
     result2 = result2 + i
 
 print ('The sum of all members of the part2 list is: ', result2)
+```
 
 ### Question 3
 ** Take the following list and only add together those list items which are even. **
