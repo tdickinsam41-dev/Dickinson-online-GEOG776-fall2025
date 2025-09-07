@@ -41,6 +41,7 @@ for i in part3:
         result3 = result3 + i
 
 print ('The sum of all even members of the part3 list is: ', result3) 
+```
 
 ### Output from script
 ![Window snap](Lab2_Output.jpg)
