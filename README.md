@@ -5,7 +5,7 @@
 | Lab  | Project Work |
 |------|--------------|
 | lab1 | [Open](Lab1/)|
-| lab2 | [Open](Lab2/)|
+| lab2 | [Open](Lab2/README.md)|
 | lab3 | [Open](Lab3/)|
 | lab4 | [Open](Lab4/)|
 | lab5 | [Open](Lab5/)|
