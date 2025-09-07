@@ -3,7 +3,8 @@
 ### Question 1
 ** Take the following list and multiply all list items together. **
 
-``` Solution for question 1
+``` 
+Solution for question 1
 part1 = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096]
 result1 = 1 # initialize
 
@@ -16,7 +17,8 @@ print ('The product of all members of the part1 list is: ', result1)
 ### Question 2
 ** Take the following list and add all list items together. **
 
-``` Solution for Question 2
+``` 
+Solution for Question 2
 part2 = [-1, 23, 483, 8573, -13847, -381569, 1652337, 718522177]
 result2 = 0 # initialize
 
@@ -39,3 +41,6 @@ for i in part3:
         result3 = result3 + i
 
 print ('The sum of all even members of the part3 list is: ', result3) 
+
+### Output from script
+![Window snap](Lab2_Output.jpg)
