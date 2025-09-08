@@ -40,6 +40,7 @@ inFile = open(r"C:\A&M\GEOG676\Dickinson-online-GEOG776-fall2025\Lab3\shape.txt"
 lines = inFile.readlines()
 inFile.close()
 
+## process each line
 for line in lines:
     components = line.split(',')
     shapeName = components[0]
