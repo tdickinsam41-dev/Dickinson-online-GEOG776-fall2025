@@ -1,4 +1,6 @@
-## Object oriented program to calculate the area of various shapes
+## Object oriented program to calculate the area of 3 shapes: rectangle, circle, triangle
+## input text file contains shape name and its dimensions
+
 ## import modules
 import math
 
