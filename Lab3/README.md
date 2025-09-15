@@ -10,4 +10,4 @@
 
 #### The following screen capture shows the required output from the lab3_python_script.py:
 
-![Window snap](Lab3_script_output_1.jpg)
+![Window snap](lab3_script_output.jpg)

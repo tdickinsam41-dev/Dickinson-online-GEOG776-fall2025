@@ -22,7 +22,8 @@ class Rectangle(Shape):
     def getArea(self):
         return self.length * self.width
 
-## circle class   
+## circle class  
+# math.pi equals the actual value of pi instead of 3.14 which will be more accurate 
 class Circle(Shape):
     def __init__(self, radius):
         super().__init__()
@@ -49,6 +50,7 @@ lines = inFile.readlines()
 inFile.close()
 
 ## process each line one at a time in the for loop
+# print statements will limit decimals to 2 places
 for line in lines:
     components = line.split(',')
     shapeName = components[0]
