@@ -1,5 +1,5 @@
-# Dickinson-online-GEOG776-fall2025
-## GEOG 776 repo
+# Dickinson-online-GEOG676-fall2025
+## GEOG 676 repo
 
 
 
