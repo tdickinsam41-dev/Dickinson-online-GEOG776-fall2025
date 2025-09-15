@@ -8,4 +8,6 @@
 - For each line, create a new object determined by the shape (e.g., Triangle object for line `Triangle,8,1` base and height) (30pt)
 - Iterate through your list and print out the area for each shape 
 
+#### The following screen shows the required output from the lab3_python_script.py:
+
 ![Window snap](lab3_script_output.jpg)
