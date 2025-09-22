@@ -74,11 +74,6 @@ arcpy.Project_management(garage_points, gdb_path + "\\" + "\Garage_Points_reproj
 ## use input to get buffer size in meters (meters are used because spatial reference is in meters)
 garageBuffered = arcpy.Buffer_analysis(gdb_path + "\\" + "\Garage_Points_reprojected", gdb_path + "\\" + "Garage_Points_buffered", buf_dist)           
 
-## select buildings that intersect buffered garages
-##arcpy.Intersect_analysis([garageBuffered, buildings], gdb_path + "\\" + "Garage_Building_Intersection", "ALL")
-
-##arcpy.TableToTable_conversion(gdb_path + "\\" + "Garage_Building_Intersection.dbf", folder_path, "nearbyBuildings.csv" )
-
 try:
     arcpy.Intersect_analysis([garageBuffered, buildings], gdb_path + '\Garage_Building_Intersection', "ALL")
     arcpy.TableToTable_conversion(gdb_path + '\Garage_Building_Intersection.dbf', folder_path, 'nearbyBuildings.csv')
