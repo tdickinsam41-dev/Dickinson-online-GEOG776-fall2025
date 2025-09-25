@@ -65,6 +65,9 @@ class BuildingProximity:
             parameterType="Required",
             direction="Input"
         )
+        ## enter range limits for buffer distance
+        param5.filter.type = "Range"    
+        param5.filter.list = [1, 10000]  # min, max values in meters
 
         ## order of list will be the same in the execute function
         params = [param0, param1, param2, param3, param4, param5]
@@ -104,8 +107,6 @@ class BuildingProximity:
 
         ## request valid buffer size in meters:
         ## min_val, max_val = 1, 10000
-  
-        # print(f"Using buffer distance: {buf_dist} meters")
 
         ## check if file gdb already exists, if not create it
         try:
@@ -113,9 +114,16 @@ class BuildingProximity:
                 ## print(f"File geodatabase {gdb_name} already exists.")
                 arcpy.AddMessage(f"File geodatabase {gdb_name} already exists.")
             else:
-                arcpy.CreateFileGDB_management(folder_path, gdb_name)
-                ## print(f"Creating file geodatabase {gdb_name}.") 
                 arcpy.AddMessage(f"Creating file geodatabase {gdb_name}.")
+                gdb_result = arcpy.CreateFileGDB_management(folder_path, gdb_name)
+                arcpy.AddMessage(gdb_result.getMessages())
+                if not arcpy.Exists(gdb_path):
+                    raise Exception(f"Failed to create file geodatabase {gdb_name}.")
+                
+            ## validate inputs
+            if not arcpy.Exists(csv_path):
+                raise FileNotFoundError(f"CSV file not found at {csv_path}. Please check the path and try again.")
+                
 
             ## load input file into feature layer
             ## csv_path = folder_path + "\\" + "garages.csv"
@@ -134,42 +142,54 @@ class BuildingProximity:
             buildings = gdb_path + "\\" + "Buildings"
 
             #arcpy.CopyFeatures_management(buildings_campus, buildings)
-            arcpy.Copy_management(buildings_campus, buildings)
+            copy_result = arcpy.Copy_management(buildings_campus, buildings)
+            arcpy.AddMessage(copy_result.getMessages())
 
         except arcpy.ExecuteError:
-            print("ArcPy tool error:")
-            print(arcpy.GetMessages(2))   
+            arcpy.AddError("ArcPy tool error:")
+            arcpy.AddError(arcpy.GetMessages(2))   
             raise
         except Exception as e:
-            print(f"Unexpected error: {e}")
-            print(traceback.format_exc())
+            arcpy.AddError(f"Unexpected error: {e}")
+            arcpy.AddError(traceback.format_exc())
             raise
 
 
         ## reprojection of garage points to match buildings
-        spatial_ref = arcpy.Describe(buildings).spatialReference
-        print(f"The spatial reference used is:", spatial_ref.name)
+        try:   
+            spatial_ref = arcpy.Describe(buildings).spatialReference
+            arcpy.AddMessage(f"Buildings spatial reference is: {spatial_ref.name} ({spatial_ref.factoryCode})")
 
-        arcpy.Project_management(garage_points, gdb_path + "\\" + "\Garage_Points_reprojected", spatial_ref)
+            project_result = arcpy.Project_management(garage_points, gdb_path + "\\" + "\Garage_Points_reprojected", spatial_ref)
+            arcpy.AddMessage(project_result.getMessages())
+
+        except arcpy.ExecuteError:
+            arcpy.AddError("ArcPy projection tool error:")
+            arcpy.AddError(arcpy.GetMessages(2))   
+            raise   
 
         ## buffer garages 
         ## use input to get buffer size in meters (meters are used because spatial reference is in meters)
         garageBuffered = arcpy.Buffer_analysis(gdb_path + "\\" + "\Garage_Points_reprojected", gdb_path + "\\" + "Garage_Points_buffered", buf_dist)           
 
         try:
-            arcpy.Intersect_analysis([garageBuffered, buildings], gdb_path + '\Garage_Building_Intersection', "ALL")
-            arcpy.TableToTable_conversion(gdb_path + '\Garage_Building_Intersection.dbf', folder_path, 'nearbyBuildings.csv')
+            inter_result = arcpy.Intersect_analysis([garageBuffered, buildings], gdb_path + '\Garage_Building_Intersection', "ALL")
+            arcpy.AddMessage(inter_result.getMessages())
+            
+            export_result = arcpy.TableToTable_conversion(gdb_path + '\Garage_Building_Intersection.dbf', folder_path, 'nearbyBuildings.csv')
+            arcpy.AddMessage(export_result.getMessages())
+            arcpy.AddMessage("Intersection and export completed successfully.")
+        
         ## arcpy.TabletoTable_conversion is deprecated
         ## suggested way to execute this
         ##   arcpy.conversion.ExportTable(gdb_path + "\Garage_Building_Intersection.dbf", folder_path + "\\clnearbyBuildings.csv")
-            print("Intersection and export completed successfully.")
         except arcpy.ExecuteError:
-            print("ArcPy tool error:")
-            print(arcpy.GetMessages(2))   
+            arcpy.AddError("ArcPy tool error during Intersect/Export:")
+            arcpy.AddError(arcpy.GetMessages())
             raise
         except Exception as e:
-            print(f"Unexpected error: {e}")
-            print(traceback.format_exc())
+            arcpy.AddError(f"Unexpected error during Intersect/Export: {e}")
+            arcpy.AddError(traceback.format_exc())
             raise
 
         return None
