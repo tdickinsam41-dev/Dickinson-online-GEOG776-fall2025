@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import arcpy
+import arcpy, traceback
 
 
 class Toolbox:
@@ -96,39 +96,26 @@ class BuildingProximity:
         campus_gdb = parameters[4].valueAsText
         buf_dist = int(parameters[5].value)
 
+        gdb_path = folder_path + "\\" + gdb_name
+
         ## set environment settings
         arcpy.env.workspace = r"C:\A&M\GEOG676\Dickinson-online-GEOG776-fall2025\Lab5"
         arcpy.env.overwriteOutput = True   
 
         ## request valid buffer size in meters:
         ## min_val, max_val = 1, 10000
-        ## code not necessary when run as a tool with parameters
-        # while True:
-        #     s = input(f"Please enter buffer distance in Meters from garage points({min_val}-{max_val}): ").strip()
-        #     try:
-        #         buf_dist = float(s)
-        #         if not (min_val <= buf_dist <= max_val):
-        #             print(f"Enter a value between {min_val} and {max_val}.")
-        #             continue
-        #         break
-        #     except ValueError:
-        #         print("Enter a valid number.")
-
+  
         # print(f"Using buffer distance: {buf_dist} meters")
-
-
-        ## define script variables
-        ##folder_path = r"C:\A&M\GEOG676\Dickinson-online-GEOG776-fall2025\Lab4"
-        ##gdb_name = "myLab4.gdb"
-        gdb_path = folder_path + "\\" + gdb_name
 
         ## check if file gdb already exists, if not create it
         try:
             if arcpy.Exists(gdb_path):
-                print(f"File geodatabase {gdb_name} already exists.")
+                ## print(f"File geodatabase {gdb_name} already exists.")
+                arcpy.AddMessage(f"File geodatabase {gdb_name} already exists.")
             else:
                 arcpy.CreateFileGDB_management(folder_path, gdb_name)
-                print(f"Creating file geodatabase {gdb_name}.") 
+                ## print(f"Creating file geodatabase {gdb_name}.") 
+                arcpy.AddMessage(f"Creating file geodatabase {gdb_name}.")
 
             ## load input file into feature layer
             ## csv_path = folder_path + "\\" + "garages.csv"
@@ -142,7 +129,7 @@ class BuildingProximity:
             garage_points = gdb_path + "\\" + garage_layer_name
 
             ## open campus file geodatabase and copy feature class to it
-            campus_gdb = folder_path + "\\" + "campus.gdb"
+            ## campus_gdb = folder_path + "\\" + "campus.gdb"
             buildings_campus = campus_gdb + "\Structures"
             buildings = gdb_path + "\\" + "Buildings"
 
