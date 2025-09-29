@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import arcpy
+import arcpy, traceback
 
 
 class Toolbox:
@@ -77,6 +77,9 @@ class GraduatedColorsRenderer:
 
     def execute(self, parameters, messages):
         """The source code of the tool."""
+        arcpy.env.overwriteOutput = True
+
+
         ## define progressor variables
         readTime = 3    # time for users to read progress
         start = 0       # start position of progressor
@@ -84,9 +87,11 @@ class GraduatedColorsRenderer:
         step = 33       # progress interval 
 
         ## initiate progressor
-        arcpy.SetProgressor("step", "Validating project file ...", start, max, step)
-        ## sleep
-        time.sleep(readTime)    # pause the exection for 3 seconds
+        try: 
+            arcpy.SetProgressor("step", "Validating project file ...", start, max, step)
+            time.sleep(readTime)    # pause the exection for 3 seconds
+        except:
+            arcpy.AddWarning("Progressor failed to initialize.")
 
         ## alert user of progress with message to Results pane
         arcpy.AddMessage("Validating project file ...")
@@ -98,11 +103,70 @@ class GraduatedColorsRenderer:
         campus = project.listMaps()[0]
 
         ## increment progressor
-        arcpy.SetProgressorPosition(start + step)
-        ## alert user of progress with message to Results pane
-        arcpy.SetProgressorLabel("Finding map layer ...")
-        ## pause execution again
-        time.sleep(readTime)    # pause the exection for 3 seconds
+        try:
+            arcpy.SetProgressorPosition(start + step)
+            ## alert user of progress with message to Results pane
+            arcpy.SetProgressorLabel("Finding map layer ...")
+            ## pause execution again
+            time.sleep(readTime)    # pause the exection for 3 seconds
+            arcpy.AddMessage("Searching for map layer ...")
+        except:
+            arcpy.AddWarning("Progressor failed to update at 33%.")
+    
+        ## Loop through the layers in the map to find the one to classify
+        try:
+            for layer in campus.listLayers():
+                ## check if layer is a feature layer
+                if layer.isFeatureLayer:
+                    ## copy the layer's symbology
+                    symbology = layer.symbology
+                    ## verify that the symbology has a renderer property
+                    if hasattr(symbology, 'renderer'):
+                        ## check if the layer is the one provided by the user
+                        if layer.name == parameters[1].valueAsText:
+                            ## increment progressor
+                            arcpy.SetProgressorPosition(start + step) ## move to 33%
+                            arcpy.SetProgressorLabel("Updating layer symbology ...")
+                            time.sleep(readTime)    # pause the execution
+                            arcpy.AddMessage("Updating symbology for " + layer.name + " layer.")
+
+                            ## update the copy's renderer to graduated colors
+                            symbology.updateRenderer('GraduatedColorsRenderer')
+
+                            ## update with field to base the chloropleth off of
+                            symbology.renderer.classificationField = "Shape_Area"
+
+                            ## increment progressor
+                            arcpy.SetProgressorPosition(start + 2*step) ## move to 66%
+                            arcpy.SetProgressorLabel("Cleaning up ...")
+                            time.sleep(readTime)    # pause the execution
+                            arcpy.AddMessage("Cleaning up ...") 
+
+                            ## set the number of classes
+                            symbology.renderer.breakCount = 7
+
+                            ## set the color ramp
+                            symbology.renderer.colorRamp = project.listColorRamps("Yellow-Orange-Brown (7 classes)")[0]
+
+                            ## update the selected layer's symbology with the modified copy
+                            layer.symbology = symbology
+
+                            arcpy.AddMessage("Finshing Generating Layer.")
+                        else:
+                            print("No Layers to update.")
+        except Exception:
+            arcpy.AddError("General error during copy:")
+            arcpy.AddError(traceback.format_exc().splitlines()[-1])
+            raise
+
+        ## increment progressor
+        arcpy.SetProgressorPosition(start + step * 3) ## move to 99%   
+        arcpy.SetProgressorLabel("Saving new project ...")
+        time.sleep(readTime)    # pause the execution
+        arcpy.AddMessage("Saving new project ...")     
+
+        ## param 2 is the folder and param 3 is the target project name    
+        project.saveACopy(parameters[2].valueAsText + "\\" + parameters[3].valueAsText + ".aprx")       
 
         return
 
