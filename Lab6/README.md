@@ -8,6 +8,6 @@
 1. Utilize a progressor inside the toolbox to inform the user how far along the script is in generating the map
 
 
-#### The following screen capture shows the output from the newly created tool along with its selection parameters:
+#### The following screen capture shows the output after the newly created tool was run along with its selection parameters:
 
-![Window snap](lab5_screen_output.jpg)
+![Window snap](lab6_newTool.jpg)
