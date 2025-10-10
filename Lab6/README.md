@@ -8,6 +8,6 @@
 1. Utilize a progressor inside the toolbox to inform the user how far along the script is in generating the map
 
 
-#### The following screen capture shows the output after the newly created tool was run along with its selection parameters:
+#### The following screen capture shows the map from the new project created from the new graduatedcolor tool:
 
-![Window snap](lab6_newTool.jpg)
+![Window snap](lab6_screen_output.jpg)
