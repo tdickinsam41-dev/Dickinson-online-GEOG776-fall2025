@@ -79,8 +79,7 @@ class GraduatedColorsRenderer:
         """The source code of the tool."""
         arcpy.env.overwriteOutput = True
 
-
-        ## define progressor variables
+        ## define the progressor variables
         readTime = 3    # time for users to read progress
         start = 0       # start position of progressor
         max = 100       # end position of progressor
@@ -90,13 +89,12 @@ class GraduatedColorsRenderer:
         try: 
             arcpy.SetProgressor("step", "Validating project file ...", start, max, step)
             time.sleep(readTime)    # pause the exection for 3 seconds
+            ## alert user of progress with message to Results pane
+            arcpy.AddMessage("Validating project file ...")
         except:
             arcpy.AddWarning("Progressor failed to initialize.")
 
-        ## alert user of progress with message to Results pane
-        arcpy.AddMessage("Validating project file ...")
-
-        ## set project variable
+        ## set project variable (uses param0)
         project = arcpy.mp.ArcGISProject(parameters[0].valueAsText)
 
         ## set campus variable to the first map from the source project
@@ -104,12 +102,12 @@ class GraduatedColorsRenderer:
 
         ## increment progressor
         try:
-            arcpy.SetProgressorPosition(start + step)
+            arcpy.SetProgressorPosition(start + step)  ## 33% complete
             ## alert user of progress with message to Results pane
             arcpy.SetProgressorLabel("Finding map layer ...")
             ## pause execution again
             time.sleep(readTime)    # pause the exection for 3 seconds
-            arcpy.AddMessage("Searching for map layer ...")
+            arcpy.AddMessage("Finding map layer ...")
         except:
             arcpy.AddWarning("Progressor failed to update at 33%.")
     
@@ -122,7 +120,7 @@ class GraduatedColorsRenderer:
                     symbology = layer.symbology
                     ## verify that the symbology has a renderer property
                     if hasattr(symbology, 'renderer'):
-                        ## check if the layer is the one provided by the user
+                        ## check if the layer is the same one provided by the user
                         if layer.name == parameters[1].valueAsText:
                             ## increment progressor
                             arcpy.SetProgressorPosition(start + step) ## move to 33%
@@ -145,7 +143,7 @@ class GraduatedColorsRenderer:
                             ## set the number of classes
                             symbology.renderer.breakCount = 7
 
-                            ## set the color ramp
+                            ## set the color ramp that supports 7 classes
                             symbology.renderer.colorRamp = project.listColorRamps("Yellow-Orange-Brown (7 classes)")[0]
 
                             ## update the selected layer's symbology with the modified copy
@@ -165,7 +163,7 @@ class GraduatedColorsRenderer:
         time.sleep(readTime)    # pause the execution
         arcpy.AddMessage("Saving new project ...")     
 
-        ## param 2 is the folder and param 3 is the target project name    
+        ## param 2 is the target folder and param 3 is the target project name    
         project.saveACopy(parameters[2].valueAsText + "\\" + parameters[3].valueAsText + ".aprx")       
 
         return
