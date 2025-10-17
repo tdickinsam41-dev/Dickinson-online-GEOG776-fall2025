@@ -7,10 +7,11 @@
 1. Using the satellite imagery you downloaded, create a composite raster image
 1. Find a digital elevation model of your area of interest and create the following:
 
-    2. A hillshade analysis raster
-    2. A slope analysis raster 
+    - A hillshade analysis raster
+    - A slope analysis raster
 
 
-#### The following screen capture shows the map from the new project created from the new graduatedcolor tool:
+#### Below, there are three screens shots. The first shows the composite image, the next shows
+#### the hillshade analysis, and the last shows the slope analysis raster.
 
 ![Window snap](lab6_screen_output.jpg)
