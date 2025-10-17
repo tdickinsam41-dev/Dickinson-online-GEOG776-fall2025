@@ -8,10 +8,11 @@ target = r"C:\A&M\GEOG676\Dickinson-online-GEOG776-fall2025\Lab7"
 band1 = arcpy.sa.Raster(source + r"\band1.tif")
 band2 = arcpy.sa.Raster(source + r"\band2.tif")
 band3 = arcpy.sa.Raster(source + r"\band3.tif")
-band4 = arcpy.sa.Raster(source + r"\band4.tif")
+## commented out because too large for github
+## band4 = arcpy.sa.Raster(source + r"\band4.tif")
 
 ## create composite
-composite = arcpy.CompositeBands_management([band1, band2, band3, band4], target + r"\composite.tif")
+composite = arcpy.CompositeBands_management([band1, band2, band3], target + r"\composite.tif")
 
 ## create hillshade
 azimuth = 315
