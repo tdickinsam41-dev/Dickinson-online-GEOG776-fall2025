@@ -14,4 +14,10 @@
 #### Below, there are three screens shots. The first shows the composite image, the next shows
 #### the hillshade analysis, and the last shows the slope analysis raster.
 
-![Window snap](lab6_screen_output.jpg)
+##### images from USGS Earth Explorer
+
+![Window snap](Composite_Screenshot.jpg)
+
+![Window snap](Hillshade_Screenshot.jpg)
+
+![Window snap](Slope_Screenshot.jpg)
